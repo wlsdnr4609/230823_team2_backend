@@ -312,7 +312,7 @@ public class RestApiMemberController {
 
 		memberService.delete(mem.getEmail());
 
-		return "succ";
+		return "succc";
 
 	}
 }
