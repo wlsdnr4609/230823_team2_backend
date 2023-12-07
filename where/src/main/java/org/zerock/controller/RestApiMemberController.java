@@ -149,7 +149,12 @@ public class RestApiMemberController {
 
 		//BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		//boolean isPasswordMatch = passwordEncoder.matches(dto.getPw(), storedHashedPassword);
-		boolean isPasswordMatch = storedHashedPassword.equals(dto.getPw());
+		boolean isPasswordMatch = false;
+		if (storedHashedPassword != null && dto.getPw() != null) {
+		    isPasswordMatch = storedHashedPassword.equals(dto.getPw());
+		} else {
+		    // storedHashedPassword 또는 dto.getPw()가 null인 경우 처리할 내용
+		}
 
 		logger.info("비밀번호 일치 여부: " + isPasswordMatch);
 
@@ -199,6 +204,15 @@ public class RestApiMemberController {
 		logger.info(mem.toString());
 
 		return memberService.emailCk(mem.getEmail());
+
+	}
+	// 이메일로 mid 체크
+	@RequestMapping(value = "/midCk", method = RequestMethod.POST)
+	public Member midCk(@RequestBody Member mem) throws Exception {
+		logger.info("midCk post ...........");
+		logger.info(mem.toString());
+
+		return memberService.midCk(mem.getEmail());
 
 	}
 
@@ -258,11 +272,16 @@ public class RestApiMemberController {
 	public String modifyPwPOST(@RequestBody Member mem, RedirectAttributes rttr) throws Exception {
 
 		logger.info(mem.toString());
-
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		String hashedPassword = passwordEncoder.encode(mem.getPw());
+		
+		System.out.println("해시된 비밀번호:" + hashedPassword);
+		mem.setPw(hashedPassword);
 		memberService.modifyPw(mem);
 
 		rttr.addAttribute("pw", mem.getPw());
 		rttr.addFlashAttribute("msg", "SUCCESS");
+		
 
 		logger.info(rttr.toString());
 
@@ -291,7 +310,7 @@ public class RestApiMemberController {
 		logger.info("delete post ...........");
 		logger.info(mem.toString());
 
-		memberService.delete(mem);
+		memberService.delete(mem.getEmail());
 
 		return "succ";
 
