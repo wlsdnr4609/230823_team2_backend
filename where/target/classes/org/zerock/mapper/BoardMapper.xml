@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zerock.mapper.BoardMapper">
+
+	<!-- id 속성은 DAO 의 메소드와 같아야 한다. 여기의 boardVO 는 mybatis-confg.xml 에 Alias 되어 
+		있습니다. -->
+	<insert id="create">
+		<![CDATA[
+		insert into board 
+		values(Board_bid_seq.nextval, #{mid},  #{niname}, #{title}, #{btype},#{cont},#{likes},#{counts}, #{replycnt},SYSDATE)
+		]]>
+	</insert>
+	<select id="selectBoardList"
+		resultType="org.zerock.domain.BoardVO">
+		<![CDATA[
+		select * 
+		from board
+		where btype = #{btype}
+		ORDER BY 
+  		regdate DESC
+			]]>
+	</select>
+	<select id="qList" resultType="org.zerock.domain.BoardVO">
+	<![CDATA[
+		SELECT *
+		FROM board
+		WHERE niname = #{niname}
+		ORDER BY 
+		regdate DESC
+		]]>
+	</select>
+	
+
+	<select id="read" resultType="org.zerock.domain.BoardVO">
+		<![CDATA[
+		select * 
+		from board
+		where bid = #{bid}
+ 		]]>
+	</select>
+	<update id="update">
+		<![CDATA[
+		update board
+		set title = #{title}, cont = #{cont}
+		where bid = #{bid}
+		]]>
+	</update>
+	
+	<update id="likes">
+		<![CDATA[
+		update board
+		set likes = #{likes}
+		where bid = #{bid}
+		]]>
+	</update>
+	
+		<delete id="delete">
+			<![CDATA[
+		delete from board where bid = #{bid}
+			]]>
+	</delete>
+	
+	<update id="updateCounts">
+	<![CDATA[
+   update board
+    set counts = counts + 1
+    where bid = #{bid}
+    ]]>
+</update>
+<select id="listAll" resultType="org.zerock.domain.BoardVO">
+    <![CDATA[
+      SELECT 
+    bid, mid, niname, title, btype, cont, likes, counts, replycnt, regdate 
+FROM 
+  board
+WHERE 
+  bid > 0
+ORDER BY 
+  bid DESC, regdate DESC
+    ]]>
+</select>
+	<select id="listPage" resultType="org.zerock.domain.BoardVO">
+ <![CDATA[
+ SELECT *
+FROM (
+  SELECT 
+        bid, mid, niname, title, btype, cont, likes, counts, replycnt, regdate,
+    ROW_NUMBER() OVER (ORDER BY bid DESC, regdate DESC) AS rnum
+  FROM 
+    board
+  WHERE 
+    bid > 0
+)
+WHERE 
+  rnum BETWEEN (#{page} - 1) * 10 + 1 AND #{page} * 10
+ORDER BY 
+  bid DESC, regdate DESC
+ ]]>
+	</select>
+	
+	<select id="listCriteria" resultType="org.zerock.domain.BoardVO">
+ <![CDATA[
+ SELECT *
+FROM (
+  SELECT 
+         bid, mid, niname, title, btype, cont, likes, counts, replycnt, regdate,
+    ROW_NUMBER() OVER (ORDER BY bid DESC, regdate DESC) AS rnum
+  FROM 
+    board
+  WHERE 
+    bid > 0
+) 
+WHERE 
+  rnum BETWEEN :pageStart AND (:pageStart + :perPageNum - 1)
+ORDER BY 
+  bid DESC, regdate DESC
+ ]]>
+	</select>
+	<select id="countPaging" resultType="int">
+ <![CDATA[
+  SELECT COUNT(bid)
+        FROM board
+        WHERE bid > 0 
+ ]]>
+	</select>
+	<sql id="search">
+    <if test="searchType != null">
+        <if test="searchType == 't'.toString()">
+            AND title LIKE '%' || #{keyword} || '%'
+        </if>
+        <if test="searchType == 'c'.toString()">
+            AND cont LIKE '%' || #{keyword} || '%'
+        </if>
+        <if test="searchType == 'w'.toString()">
+            AND niname LIKE '%' || #{keyword} || '%'
+        </if>
+        <if test="searchType == 'tc'.toString()">
+            AND (title LIKE '%' || #{keyword} || '%' OR cont LIKE '%' || #{keyword} || '%')
+        </if>
+        <if test="searchType == 'cw'.toString()">
+            AND (cont LIKE '%' || #{keyword} || '%' OR niname LIKE '%' || #{keyword} || '%')
+        </if>
+        <if test="searchType == 'tcw'.toString()">
+            AND (title LIKE '%' || #{keyword} || '%' OR cont LIKE '%' || #{keyword} || '%' OR niname LIKE '%' || #{keyword} || '%')
+        </if>
+    </if>
+</sql>
+<select id="listSearch" resultType="org.zerock.domain.BoardVO">
+    <![CDATA[
+  SELECT * 
+    FROM (
+      SELECT 
+            bid, mid, niname, title, btype, cont, likes, counts, replycnt, regdate,
+        ROW_NUMBER() OVER (ORDER BY bid DESC) AS rnum
+      FROM 
+        board
+      WHERE 
+        bid > 0
+    )
+    WHERE 
+      rnum BETWEEN #{pageStart} AND (#{pageStart} + #{perPageNum} - 1)
+                 ]]>
+                <include refid="search"/>
+         <![CDATA[
+        
+ ORDER BY bid DESC
+    ]]>
+</select>
+
+<select id="listSearchCount" resultType="int">
+    <![CDATA[
+        SELECT COUNT(bid)
+        FROM board
+        WHERE bid > 0
+    ]]>
+        <include refid="search"/>
+</select>
+ <update id="updateReplyCnt">
+ <![CDATA[
+  UPDATE board
+  SET replycnt = replycnt + #{amount}
+  WHERE bid = #{bid}
+    ]]>
+</update> 
+
+
+ 
+<insert id="addAttach">
+ <![CDATA[
+INSERT INTO attach (fullname, bid, aid, regdate)
+VALUES (#{fullname}, board_bid_seq.CURRVAL, attach_aid_seq.NEXTVAL, SYSDATE)
+    ]]>
+</insert> 
+
+
+<select id="getAttach" resultType="string">
+<![CDATA[
+SELECT fullname
+FROM attach
+WHERE bid = #{bid}
+ORDER BY regdate DESC
+]]>
+</select> 
+
+ 
+<delete id="deleteAttach">
+<![CDATA[
+DELETE FROM attach
+WHERE bid = #{bid}
+]]>
+</delete>
+
+<insert id="replaceAttach">
+<![CDATA[
+INSERT INTO attach (fullname, bid, aid, regdate)
+VALUES (#{fullname}, board_bid_seq.CURRVAL, attach_aid_seq.NEXTVAL, SYSDATE)
+]]>
+</insert>
+
+</mapper>

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zerock.mapper.MemberMapper">
+
+	<select id="selectMemberList"
+		resultType="org.zerock.domain.Member">
+		select *
+		from MEMBER
+		ORDER BY mid DESC
+	</select>
+
+
+	<insert id="register">
+
+		insert into member (name, niname, email,pw)
+		values(#{name},#{niname},#{email},#{pw} )
+
+	</insert>
+	
+	<select id="getHashedPasswordByEmail" resultType="java.lang.String">
+
+		select pw
+		from member
+		where email = #{email}
+
+	</select>
+	
+	<select id="login" resultType="org.zerock.domain.Member"
+		parameterType="map">
+
+		select *
+		from member
+		where
+		email = #{email}
+		and pw = #{pw}
+
+	</select>
+
+	<select id="read" resultType="org.zerock.domain.Member">
+
+		select *
+		from member
+		where mid =
+		#{mid}
+
+	</select>
+
+
+	<update id="keepLogin">
+
+		update member
+		set sessionKey = #{sessionId},
+		sessionLimit = #{next}
+		where email = #{email}
+
+	</update>
+	<!-- <select id="checkUserWithSessionKey" resultType="org.zerock.domain.Member"> 
+		select * from member where sessionKey = #{value} and sessionlimit > now() 
+		</select> -->
+	<select id="emailCk" resultType="org.zerock.domain.Member">
+
+		select mid, email
+		from member
+		where email = #{email}
+
+	</select>
+
+	<select id="ninameCk" resultType="org.zerock.domain.Member">
+
+		select mid, email
+		from member
+		where niname = #{niname}
+
+	</select>
+
+	<select id="readMember" resultType="org.zerock.domain.Member">
+
+		select email, niname, name,
+		pw, regdate, locagree
+		from member
+		where email = #{email}
+
+	</select>
+	<!-- <update id="modify"> update member set niname = #{niname}, pw = #{pw}, 
+		locagree =#{locagree} where email = #{email} </update> -->
+
+	<update id="modifyName">
+
+		update member
+		set name = #{name}
+		where email = #{email}
+
+	</update>
+
+	<update id="modifyNiname">
+
+		update member
+		set niname = #{niname}
+		where email =
+		#{email}
+
+	</update>
+
+	<update id="modifyPw">
+
+		update member
+		set pw = #{pw}
+		where email = #{email}
+
+	</update>
+
+	<update id="modifyLoca">
+
+		update member
+		set locagree =#{locagree}
+		where email =
+		#{email}
+
+	</update>
+
+	<delete id="delete">
+
+		delete from member
+		where email = #{email}
+	</delete>
+
+
+</mapper>
