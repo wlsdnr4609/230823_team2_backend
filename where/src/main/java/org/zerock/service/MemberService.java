@@ -35,7 +35,10 @@ public interface MemberService {
 
 	public Member read(int mid);
 
-	public void delete(Member mem);
+	public void delete(String email);
+
+	Member midCk(String email);
+
 
 
 //	public boolean authenticateUser(Member mem);

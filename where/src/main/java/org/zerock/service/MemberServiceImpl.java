@@ -116,8 +116,16 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	@Transactional
-	public void delete(Member mem) {
-		memberMapper.delete(mem);
+	public void delete(String email) {
+		memberMapper.delete(email);
 	}
+
+	@Override
+	public Member midCk(String email) {
+		// TODO Auto-generated method stub
+	  return memberMapper.midCk(email);
+	}
+
+	
 
 }

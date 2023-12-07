@@ -31,11 +31,13 @@ public interface MemberMapper {
 
 	public Member read(int mid);
 
-	public void delete(Member mem);
+	public void delete(String email);
 
 	public Member emailCk(String email);
 
 	public Member ninameCk(String niname);
+
+	public Member midCk(String email);
 
 
 
