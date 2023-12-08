@@ -223,6 +223,21 @@ public class RestApiMemberController {
 	}
 
 	// 마이페이지 회원정보 수정
+	@RequestMapping(value = "/modifyMember", method = RequestMethod.POST)
+	public String modifyMemberPOST(@RequestBody Member mem, RedirectAttributes rttr) throws Exception {
+
+		logger.info(mem.toString());
+
+		memberService.modifyMember(mem);
+
+		rttr.addAttribute("name", mem.getName());
+		rttr.addFlashAttribute("msg", "SUCCESS");
+
+		logger.info(rttr.toString());
+
+		return "SUCCESS";
+
+	}
 	@RequestMapping(value = "/modifyName", method = RequestMethod.POST)
 	public String modifyNamePOST(@RequestBody Member mem, RedirectAttributes rttr) throws Exception {
 
