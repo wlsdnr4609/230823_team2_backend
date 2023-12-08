@@ -19,7 +19,7 @@ public interface MemberMapper {
 
 	public Member readMember(String email);
 	
-	//public void modify(Member mem);
+	public void modifyMember(Member mem);
 	
 	public void modifyName(Member mem);
 	

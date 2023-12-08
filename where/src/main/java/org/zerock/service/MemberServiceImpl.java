@@ -78,11 +78,11 @@ public class MemberServiceImpl implements MemberService {
 		return memberMapper.readMember(email);
 	}
 
-//	@Override
-//	@Transactional
-//	public void modify(Member mem) {
-//		memberMapper.modify(mem);
-//	}
+	@Override
+	@Transactional
+	public void modifyMember(Member mem) {
+		memberMapper.modifyMember(mem);
+	}
 
 	@Override
 	@Transactional
