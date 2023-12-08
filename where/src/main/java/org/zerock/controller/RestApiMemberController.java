@@ -227,7 +227,16 @@ public class RestApiMemberController {
 	public String modifyMemberPOST(@RequestBody Member mem, RedirectAttributes rttr) throws Exception {
 
 		logger.info(mem.toString());
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		String hashedPassword = passwordEncoder.encode(mem.getPw());
 
+		System.out.println("해시된 비밀번호:" + hashedPassword);
+
+//		boolean isPasswordMatch = passwordEncoder.matches(mem.getPw(), hashedPassword);
+//		System.out.println("비밀번호 일치 여부:" + isPasswordMatch);
+
+		mem.setPw(hashedPassword);
+		
 		memberService.modifyMember(mem);
 
 		rttr.addAttribute("name", mem.getName());
@@ -273,7 +282,16 @@ public class RestApiMemberController {
 	public String modifyPwPOST(@RequestBody Member mem, RedirectAttributes rttr) throws Exception {
 
 		logger.info(mem.toString());
+		
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		String hashedPassword = passwordEncoder.encode(mem.getPw());
 
+		System.out.println("해시된 비밀번호:" + hashedPassword);
+
+//		boolean isPasswordMatch = passwordEncoder.matches(mem.getPw(), hashedPassword);
+//		System.out.println("비밀번호 일치 여부:" + isPasswordMatch);
+
+		mem.setPw(hashedPassword);
 		memberService.modifyPw(mem);
 
 		rttr.addAttribute("pw", mem.getPw());
