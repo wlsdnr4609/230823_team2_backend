@@ -73,82 +73,14 @@ public class RestApiController {
        response.setHeader("x-total-count", String.valueOf(list.size()));
        return list;
    }
-    
-   /*
-    * @RequestMapping(value = "/list", method = RequestMethod.GET) public
-    * List<BoardVO> boardList(@ModelAttribute("cri") SearchCriteria cri, Model
-    * model) throws Exception { logger.info("// /board/list");
-    * 
-    * logger.info(cri.toString());
-    * 
-    * List<BoardVO> list = service.listSearchCriteria(cri);
-    * model.addAttribute("list", service.listSearchCriteria(cri));
-    * 
-    * logger.info("// list.toString()=" + list.toString());
-    * 
-    * model.addAttribute("list", list);
-    * 
-    * PageMaker pageMaker = new PageMaker(); pageMaker.setCri(cri);
-    * pageMaker.setTotalCount(service.listSearchCount(cri));
-    * 
-    * model.addAttribute("pageMaker", pageMaker);
-    * 
-    * return list; // 해당 뷰 페이지의 경로를 반환합니다. }
-    */
-   
-   /*
-    * @RequestMapping(value = "/qlist", method = RequestMethod.GET) public
-    * List<BoardVO> qList(@RequestParam("niname") String niname, Model model)
-    * throws Exception { logger.info("// /board/qlist");
-    * 
-    * List<BoardVO> list = service.qList(niname);
-    * 
-    * logger.info("// list.toString()=" + list.toString());
-    * 
-    * model.addAttribute("list", list);
-    * 
-    * return list; }
-    */
-       
-       
-   /*
-    * @RequestMapping(value = "/qlist/{niname}", method = RequestMethod.GET) public
-    * ResponseEntity<List<BoardVO>> list(@PathVariable("niname") String niname) {
-    * 
-    * 
-    * ResponseEntity<List<BoardVO>> entity = null;
-    * 
-    * ResponseEntity<List<BoardVO>> entity = null;
-    * 
-    * try { entity = new ResponseEntity<>(service.qListReply(niname),
-    * HttpStatus.OK);
-    * 
-    * } catch (Exception e) { e.printStackTrace(); entity = new
-    * ResponseEntity<>(HttpStatus.BAD_REQUEST); }
-    * 
-    * return entity; }
-    */
-   
-   @RequestMapping(value = "/qlist", method = RequestMethod.GET) public
-     List<BoardVO> qListPage(@RequestParam("niname") String niname,Model model) throws  Exception { 
-   
-     
-     List<BoardVO> list = service.qList(niname);
-    
-    
-     
-      model.addAttribute("list", list); 
       
-      return list; 
-      }
-   
    @RequestMapping(value = "/qlist", method = RequestMethod.POST) public List<BoardVO>
-     qlist(@RequestBody BoardVO board) throws Exception {
-     
-        String niname = board.getNiname();
-           return service.qList(niname);
-     
-     }
+   qlist(@RequestBody BoardVO board,@RequestParam(name = "btype", required = false) Character btype) throws Exception {
+   
+      String niname = board.getNiname();
+   
+      return service.qList(btype,niname);
+   }
    
    @RequestMapping(value = "/write", method = RequestMethod.GET)
    public ResponseEntity<String> registerGET() {
@@ -263,20 +195,6 @@ public class RestApiController {
 
       return service.getAttach(bid);
    }
-
-   /*
-    * @RequestMapping(value = "/getAttach/{bid}", method = RequestMethod.GET)
-    * 
-    * @ResponseBody public ResponseEntity<List<String>>
-    * getAttach(@PathVariable("bid") Integer bid) { try { List<String> attachList =
-    * service.getAttach(bid);
-    * 
-    * if (attachList.isEmpty()) { return new
-    * ResponseEntity<>(HttpStatus.NOT_FOUND); }
-    * 
-    * return new ResponseEntity<>(attachList, HttpStatus.OK);
-    * 
-    * } catch (Exception e) { return new
-    * ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); } }
-    */
 }
+
+ 

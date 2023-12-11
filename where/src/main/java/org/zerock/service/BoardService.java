@@ -41,7 +41,7 @@ public interface BoardService {
 
   void create(BoardVO vo) throws Exception;
 
- // List<BoardVO> qList(@Param("niname")String niname) throws Exception;
+  List<BoardVO> qList(@Param("btype")char btype,@Param("niname")String niname) throws Exception;
 
   public List<BoardVO> qListReply(@Param("niname")String niname) throws Exception;
 }

@@ -49,6 +49,8 @@ public interface BoardMapper {
   public List<String> getAttach(@Param("bid")Integer bid)throws Exception;  
    
   public void deleteAttach(@Param("bid")Integer bid)throws Exception;
+ 
+  List<BoardVO> qList(@Param("btype")char btype,@Param("niname")String niname) throws Exception;
   
   public void replaceAttach(String fullName, Integer bid)throws Exception;
 }

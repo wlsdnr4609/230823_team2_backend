@@ -24,12 +24,7 @@ public class BoardServiceImpl implements BoardService {
     return boardMapper.selectBoardList(btype);
   }
 
-	/*
-	 * @Override
-	 * 
-	 * @Transactional public List<BoardVO> qList(String niname) throws Exception {
-	 * return boardMapper.qList(niname); }
-	 */
+	
   @Override
   public List<BoardVO> qListReply(String niname) throws Exception {
 
@@ -152,4 +147,10 @@ public class BoardServiceImpl implements BoardService {
      boardMapper.create(vo);
   } 
  
+  @Override
+  public List<BoardVO> qList(char btype,String niname) throws Exception {
+
+    return boardMapper.qList(btype,niname);
+  }
+
   }

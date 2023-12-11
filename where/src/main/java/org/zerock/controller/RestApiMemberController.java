@@ -296,22 +296,16 @@ public class RestApiMemberController {
 	public String modifyPwPOST(@RequestBody Member mem, RedirectAttributes rttr) throws Exception {
 
 		logger.info(mem.toString());
-<<<<<<< HEAD
-		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		String hashedPassword = passwordEncoder.encode(mem.getPw());
-		
-		System.out.println("해시된 비밀번호:" + hashedPassword);
-=======
-		
-		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		String hashedPassword = passwordEncoder.encode(mem.getPw());
 
-		System.out.println("해시된 비밀번호:" + hashedPassword);
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		String hashedPassword = passwordEncoder.encode(mem.getPw());
+		
+		System.out.println("해시된 비밀번호:" + hashedPassword);	
 
 //		boolean isPasswordMatch = passwordEncoder.matches(mem.getPw(), hashedPassword);
 //		System.out.println("비밀번호 일치 여부:" + isPasswordMatch);
 
->>>>>>> feature/jinuk
+
 		mem.setPw(hashedPassword);
 		memberService.modifyPw(mem);
 

@@ -5,72 +5,76 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="org.zerock.mapper.ReplyMapper">
 
-	<select id="list" resultType="org.zerock.domain.ReplyVO">
-		SELECT *
-		FROM reply
-		WHERE bid = #{bid}
-		ORDER BY rid DESC
-	</select>
-
-	<insert id="create">
-	   <![CDATA[
-		INSERT INTO reply 
-	VALUES (reply_rid_seq.nextval, #{bid}, #{replytext}, #{replyer}, SYSDATE, SYSDATE)
-
-		 	 ]]>
-	</insert>
-
-	<update id="update">
-	<![CDATA[
-		UPDATE reply
-	SET replytext = #{replytext},
-    updateregdate = SYSDATE
-	WHERE rid = #{rid}
-	 ]]>
-	</update>
-
-	<delete id="delete">
-		<![CDATA[
-		DELETE FROM reply
-		WHERE rid = #{rid}
-		 ]]>
-	</delete>
-
-
-	<select id="listPage" resultType="org.zerock.domain.ReplyVO">
-	<![CDATA[
-		SELECT *
-FROM (
-    SELECT rid, bid, replytext, replyer, regdate, ROWNUM AS rnum
-    FROM (
-       
-        SELECT rid, bid, replytext, replyer, regdate
+    <!-- Selects -->
+    <select id="list" resultType="org.zerock.domain.ReplyVO">
+        <![CDATA[
+        SELECT *
         FROM reply
         WHERE bid = #{bid}
         ORDER BY rid DESC
-    )
-    WHERE ROWNUM <= #{cri.pageStart} + #{cri.perPageNum}
-)
-WHERE rnum > #{cri.pageStart}
-	 ]]>
-	</select>
+        ]]>
+    </select>
 
-	<select id="count" resultType="int">
-		<![CDATA[
-		SELECT COUNT(bid) AS reply_count
-		FROM reply
-		WHERE bid = #{bid}
-		]]>
-	</select>
+    <!-- Insert -->
+    <insert id="create">
+        <![CDATA[
+        INSERT INTO reply 
+        VALUES (reply_rid_seq.nextval, #{bid}, #{replytext}, #{replyer}, SYSDATE, SYSDATE)
+        ]]>
+    </insert>
 
+    <!-- Update -->
+    <update id="update">
+        <![CDATA[
+        UPDATE reply
+        SET replytext = #{replytext},
+            updateregdate = SYSDATE
+        WHERE rid = #{rid}
+        ]]>
+    </update>
 
-	<select id="getBid" resultType="int">
-		<![CDATA[
-		SELECT bid
-		FROM reply
-		WHERE rid = #{rid}
-			 ]]>
-	</select>
+    <!-- Delete -->
+    <delete id="delete">
+        <![CDATA[
+        DELETE FROM reply
+        WHERE rid = #{rid}
+        ]]>
+    </delete>
+
+    <!-- List Page -->
+    <select id="listPage" resultType="org.zerock.domain.ReplyVO">
+        <![CDATA[
+        SELECT *
+        FROM (
+            SELECT rid, bid, replytext, replyer, regdate, ROWNUM AS rnum
+            FROM (
+                SELECT rid, bid, replytext, replyer, regdate
+                FROM reply
+                WHERE bid = #{bid}
+                ORDER BY rid DESC
+            )
+            WHERE ROWNUM <= #{cri.pageStart} + #{cri.perPageNum}
+        )
+        WHERE rnum > #{cri.pageStart}
+        ]]>
+    </select>
+
+    <!-- Count -->
+    <select id="count" resultType="int">
+        <![CDATA[
+        SELECT COUNT(bid) AS reply_count
+        FROM reply
+        WHERE bid = #{bid}
+        ]]>
+    </select>
+
+    <!-- Get Bid -->
+    <select id="getBid" resultType="int">
+        <![CDATA[
+        SELECT bid
+        FROM reply
+        WHERE rid = #{rid}
+        ]]>
+    </select>
 
 </mapper>
-
