@@ -18,15 +18,16 @@
 		values(#{name},#{niname},#{email},#{pw} )
 
 	</insert>
-	
-	<select id="getHashedPasswordByEmail" resultType="java.lang.String">
+
+	<select id="getHashedPasswordByEmail"
+		resultType="java.lang.String">
 
 		select pw
 		from member
 		where email = #{email}
 
 	</select>
-	
+
 	<select id="login" resultType="org.zerock.domain.Member"
 		parameterType="map">
 
@@ -83,8 +84,14 @@
 		where email = #{email}
 
 	</select>
-	<!-- <update id="modify"> update member set niname = #{niname}, pw = #{pw}, 
-		locagree =#{locagree} where email = #{email} </update> -->
+
+	<update id="modifyMember">
+
+		update member set name = #{name}, niname = #{niname}, pw = #{pw},
+		locagree = #{locagree} where email = #{email}
+
+	</update>
+
 
 	<update id="modifyName">
 

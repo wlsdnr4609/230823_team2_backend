@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zerock.mapper.CarMapper">
+
+	<select id="selectCarList"
+		resultType="org.zerock.domain.CarVO">
+		select *
+		from CarRegister
+		ORDER BY cid DESC
+	</select>
+
+
+	<select id="read" resultType="org.zerock.domain.CarVO">
+
+		select *
+		from CarRegister
+		where Cid =
+		#{Cid}
+
+	</select>
+
+
+	<insert id="carRegi">
+
+		insert into CarRegister (carNo, carBrand, carModel, charType)
+		values(#{carNo},#{carBrand},#{carModel},#{charType} ) 
+
+	</insert>
+
+
+
+	<update id="modifyMember">
+
+		update member set name = #{name}, niname = #{niname}, pw = #{pw},
+		locagree = #{locagree} where email = #{email}
+
+	</update>
+
+
+
+	<delete id="delete">
+
+		delete from CarRegister
+		where email = #{email}
+		
+	</delete>
+
+
+</mapper>
